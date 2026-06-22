@@ -1,7 +1,7 @@
 
 # 🌌 XiaoXi Studio — Full-Site CMS Control Center
 
-<div align="center">
+&lt;div align="center"&gt;
 
 ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?style=for-the-badge&amp;logo=cloudflarepages&amp;logoColor=white)
 ![Cloudflare D1](https://img.shields.io/badge/Cloudflare%20D1-F38020?style=for-the-badge&amp;logo=sqlite&amp;logoColor=white)
@@ -11,38 +11,108 @@
 ![Markdown Ready](https://img.shields.io/badge/Markdown%20Ready-000000?style=for-the-badge&amp;logo=markdown&amp;logoColor=white)
 ![License MIT](https://img.shields.io/badge/License-MIT-00618A?style=for-the-badge)
 
-</div>
+&lt;/div&gt;
+
+---
+
+## ✨ 核心优势矩阵 / System Highlights
+
+| 功能特性 | 传统静态作品集 | XiaoXi Studio 全站 CMS |
+| :--- | :--- | :--- |
+| **全站可配置** | ❌ 硬编码，改字需重新部署 | ✅ 6 大模块（Hero、走马灯、数据墙、时间轴、法务条款）全量纳入后台 `/admin` 可视化一键修改 |
+| **混合媒体管理** | ❌ 静态托管，需第三方服务 | ✅ R2 直传图片/原生 `.mp4`，实时进度条，云端预播放预览 |
+| **云端部署** | ❌ 复杂命令行配置 | ✅ **100% 网页控制台可视化操作，零命令行门槛** |
+| **本地开发** | ❌ 需要完整云端环境 | ✅ `isLocal` 机制 + localStorage 完美断网闭环测试 |
+| **安全认证** | ❌ 无防护 | ✅ HTTP Basic Auth 边缘中间件，密码锁死环境变量 |
 
 ---
 
 ## 📖 项目简介 / Project Overview
 
-**专为独立创作者 / 影视工作室定制的全站无后缀路径、全动态内容驱动的高保真多页面全栈系统。**
+**专为独立创作者、影视工作室定制的零门槛全栈数字展示系统。无需任何命令行经验，通过 Cloudflare 网页控制台就能完成全流程部署。**
 
-A fully dynamic, headless CMS-driven portfolio system tailored for creative professionals and motion graphics studios, featuring clean URL routing, Cloudflare-native serverless architecture, and 100% configurable content.
+A zero-config, full-stack portfolio system tailored for creative professionals. 100% visual deployment through Cloudflare Dashboard—no command line required.
 
 ---
 
-## ✨ 系统亮点矩阵 / System Highlights
+## 🚀 纯网页可视化：Cloudflare 云端保姆级部署教学
 
-| 亮点维度 | 普通静态作品集 | XiaoXi Studio 全栈系统 |
+### 🔹 第一步：网页创建 D1 数据库与 R2 存储桶
+
+1. **打开 Cloudflare 控制台**，登录你的账户
+2. **创建 D1 数据库**：
+   - 在左侧菜单点击 **「Workers &amp; Pages」** → **「D1 数据库」**
+   - 点击右上角蓝色大按钮 **「创建数据库」**
+   - 数据库名称（Database name）**严格填写为**：`xiaoxi-db`
+   - 点击 **「创建」** 按钮完成
+3. **创建 R2 存储桶**：
+   - 在左侧菜单点击 **「R2 存储桶」**
+   - 点击右上角蓝色大按钮 **「创建存储桶」**
+   - 存储桶名称（Bucket name）**严格填写为**：`xiaoxi-media`
+   - 点击 **「创建存储桶」** 按钮
+4. **开启 R2 公开访问**（关键步骤）：
+   - 进入刚创建的 `xiaoxi-media` 存储桶
+   - 点击顶部的 **「设置」** 标签
+   - 找到 **「公开访问」** 区域，点击 **「允许公开访问」**
+   - 复制并记录生成的公网访问地址（形如 `https://pub-xxx.r2.dev`）
+
+### 🔹 第二步：一键执行数据库建表与种子数据导入
+
+1. 进入刚创建的 `xiaoxi-db` 数据库控制台
+2. 点击顶部的 **「控制台/Console」** 标签页
+3. 在你的本地电脑上，打开项目根目录下的 `schema.sql` 文件
+4. **全选复制 `schema.sql` 中的所有内容**（从第一行到最后一行）
+5. 将复制的内容**粘贴进 D1 网页控制台的输入框**中
+6. 点击蓝色的 **「执行」** 按钮
+7. 看到执行成功提示后，数据库初始化完成！
+
+### 🔹 第三步：前台 Pages 项目与云端资源的【一键连接绑定】
+
+1. 前往 **「Workers &amp; Pages」** → **「Create Application」** → **「Pages」**
+2. 选择 **「上传资产」**（Upload assets）
+3. **项目名称**：填写为 `xiaoxistudio`（或你喜欢的名字）
+4. **创建项目**后，进入该 Pages 项目的后台
+5. 点击顶部的 **「设置」** → **「绑定」** 标签页
+6. **绑定 D1 数据库**：
+   - 点击右上角蓝色大按钮 **「添加绑定 +」**
+   - 在弹出的浮窗左侧列表中选择 **「D1 数据库」**
+   - **变量名称（Variable name）**：**严格填写为大写** → `DB`
+   - **D1 数据库**：在下拉菜单中**一键选中**你刚刚创建的 `xiaoxi-db`
+   - 点击 **「保存」** 按钮
+7. **绑定 R2 存储桶**：
+   - 再次点击 **「添加绑定 +」** 大按钮
+   - 在左侧列表中选择 **「R2 存储桶」**
+   - **变量名称（Variable name）**：**严格填写为大写** → `MY_R2_BUCKET`
+   - **R2 存储桶**：在下拉菜单中**一键选中**刚刚创建的 `xiaoxi-media`
+   - 点击 **「保存」** 按钮
+
+### 🔹 第四步：环境变量一键填装
+
+1. 在同一 **「设置」** 页面，点击左侧的 **「环境变量」** 标签
+2. 点击 **「添加变量」** 按钮，依次添加以下 2 个变量：
+
+| 变量 Key (Variable Name) | 填入的内容值示例 | 作用与安全防线说明 |
 | :--- | :--- | :--- |
-| **全站可配置 (100% Headless CMS)** | ❌ 硬编码 HTML，改文字需重新部署 | ✅ 6 大模块（Hero、走马灯、蓝图、战绩、联系、时间轴、法务）全量纳入 D1 数据库，后台可视化编辑 |
-| **混合媒体流管理** | ❌ 静态图片托管，视频需第三方服务 | ✅ R2 直传图片/原生 `.mp4`，实时进度条，云端预播放预览 |
-| **边缘安全门禁** | ❌ 无认证，或需第三方插件 | ✅ HTTP Basic Auth 中间件，密码锁死云端环境变量，秒级拦截 |
-| **URL 纯净度** | ❌ `/about.html` 丑陋后缀 | ✅ `/about` 无后缀文件级路由，专业感拉满 |
-| **本地开发体验** | ❌ 需要完整云端环境 | ✅ 内置 `isLocal` 分流层 + localStorage 混合模拟，完美断网闭环测试 |
+| `ADMIN_PASSWORD` | `你自定义的后台超级管理密码`（例如：`MySuperSecret123`） | 锁死边缘中间件 HTTP Basic Auth，防范 `/admin` 越权修改全站内容 |
+| `R2_PUBLIC_URL` | `https://pub-xxxx.r2.dev`（第一步中复制的 R2 公网访问地址） | 后端上传成功后，用于自动拼接前台可直接流畅播放的真多媒体 URL |
+
+3. 添加完成后，点击底部的 **「保存并部署」** 按钮
+
+### 🔹 第五步：上传代码文件并上线
+
+1. 在 Pages 项目后台，点击 **「部署」** 标签
+2. 点击 **「创建新部署」** 按钮
+3. 将本地电脑项目文件夹 `d:\Git\CC` 中的所有文件（除了 `.wrangler` 文件夹）全选
+4. **拖入**上传框或点击 **「选择文件」** 上传
+5. 点击 **「保存并部署」** 按钮
+6. 等待 1-2 分钟，部署成功后访问提供的 `*.pages.dev` 域名即可！
 
 ---
 
-## 🛠️ 保姆级本地开发指南 / Local Development Workflow
+## 🛠️ 本地闭环调试流程 / Local Zero-Dependency Check
 
 ### 前置准备
-确保已安装 Node.js 18+ 和 `wrangler` CLI：
-
-```bash
-npm install -g wrangler
-```
+确保已安装 Node.js 18+
 
 ### 启动本地服务器
 
@@ -55,51 +125,46 @@ npx wrangler pages dev .
 
 ### 本地模拟特性
 
-由于 `dataService.js` 内置智能分流与 localStorage 混合 overlay 机制，本地运行时：
+在本地运行时，系统会自动检测到本地协议并智能回退：
 
 ✅ **完全断网、无云端依赖**也可完美运行  
-✅ 分类、作品的增删改查完美在浏览器中持久化  
-✅ 联系方式修改即时生效，完美模拟线上体验  
-✅ 后台 `/admin` 直接可访问（用户名 `xiaoxi`，密码 `admin123`）
+✅ 所有修改（分类、作品、联系方式）都会自动保存在浏览器 localStorage 中  
+✅ 刷新页面数据不丢失，完美模拟线上体验  
+✅ 后台 `/admin` 直接可访问（用户名：`xiaoxi`，默认密码：`admin123`）
 
 ---
 
-## 🚀 终极 Cloudflare 生产部署教学 / Production Deployment Masterclass
+## 🔐 后台访问凭据 / Admin Credentials
 
-### 🔹 步骤一：创建并初始化 D1 关系型数据库
+| 项目 | 默认值 | 说明 |
+| :--- | :--- | :--- |
+| **后台路径** | `/admin` | 访问 CMS 可视化控制台 |
+| **用户名** | `xiaoxi` | 固定用户名 |
+| **密码** | `admin123`（本地）或环境变量 `ADMIN_PASSWORD`（云端） | 线上环境密码由环境变量完全控制 |
 
-```bash
-# 创建数据库
-npx wrangler d1 create xiaoxi-db
+---
 
-# 执行建表脚本 &amp; 种子数据
-npx wrangler d1 execute xiaoxi-db --remote --file=./schema.sql
-```
+## 📝 配置项速查表 / Site Configs Reference
 
-### 🔹 步骤二：创建 R2 多媒体分布式存储桶
+### 首页配置 (Home)
+| 配置项 | 作用 |
+| :--- | :--- |
+| `home_hero_title` | Hero 区域大标题 |
+| `home_hero_subtitle` | Hero 副标题 |
+| `home_hero_status` | Hero 状态标签 |
+| `home_hero_fields` | Hero 领域标签 |
+| `home_marquee_text` | 顶部滚动公告栏文字 |
+| `home_stat_a_value`/`label`/`desc` | 数据墙第 1 项 |
+| `home_stat_b_value`/`label`/`desc` | 数据墙第 2 项 |
+| `home_stat_c_value`/`label`/`desc` | 数据墙第 3 项 |
+| `home_stat_d_value`/`label`/`desc` | 数据墙第 4 项 |
 
-1. 打开 [Cloudflare Dashboard](https://dash.cloudflare.com/) → 进入 **R2**
-2. 点击 **Create Bucket**，命名为 `xiaoxi-media`
-3. **关键步骤**：进入 Bucket 设置 → 点击 **Make Public** 或绑定自定义域名
-4. 记录下你的 R2 公网访问地址（形如 `https://pub-xxx.r2.dev`）
-
-### 🔹 步骤三：创建 Pages 项目与全栈配置
-
-前往 **Workers &amp; Pages** → **Create Application** → **Pages**，选择 **Upload assets**（或连接 Git 仓库）。
-
-在项目设置页面，完整填写以下配置：
-
-| 资源类别 | 绑定名称 / 变量 Key | 期望填入的值 / 映射对象 | 作用说明 |
-| :--- | :--- | :--- | :--- |
-| **D1 数据库绑定** | `DB` | 映射到 `xiaoxi-db` | 接管全站作品、分类、全局文本配置的数据流 |
-| **R2 存储桶绑定** | `MY_R2_BUCKET` | 映射到 `xiaoxi-media` | 负责接收后台直传的视频/图片二进制流大对象 |
-| **环境变量 (Variable)** | `ADMIN_PASSWORD` | 你的自定义超级密码 | 锁死 `/admin` 后台及 `/api` 写入接口的安全大闸 |
-| **环境变量 (Variable)** | `R2_PUBLIC_URL` | 例如 `https://pub-xxx.r2.dev` | 用于在上传成功后，拼接出可供前台直接播放的真多媒体 URL |
-
-### 🔹 步骤四：部署发布
-
-Git 连接方式：提交代码后自动触发部署  
-手动上传方式：将 `d:\Git\CC` 下的文件拖入上传框
+### 全局联系配置
+| 配置项 | 作用 |
+| :--- | :--- |
+| `contact_studio_email` | 合作邮箱 |
+| `contact_studio_wechat` | 微信 ID |
+| `contact_studio_wechat_qrcode` | 微信二维码 R2 链接 |
 
 ---
 
@@ -119,47 +184,12 @@ XiaoXi Studio/
 │   ├── admin.js              # 四 Tab CMS 超级后台
 │   └── api/
 │       ├── _middleware.js    # API 安全认证中间件
-│       ├── config.js         # 旧版 KV 配置接口（兼容）
 │       ├── configs.js        # 全新 site_configs CMS 接口
 │       ├── categories.js     # 分类增删改查接口
 │       ├── projects.js       # 作品增删改查接口
 │       └── upload.js         # R2 多媒体上传接口
-└── .wrangler/                # Wrangler 本地缓存（自动生成）
+└── .gitignore                # Git 忽略文件配置
 ```
-
----
-
-## 🔐 后台访问凭据 / Admin Credentials
-
-| 项目 | 默认值 | 说明 |
-| :--- | :--- | :--- |
-| **后台路径** | `/admin` | 访问 CMS 控制台 |
-| **用户名** | `xiaoxi` | 固定用户名 |
-| **密码** | `admin123` | 可通过环境变量 `ADMIN_PASSWORD` 覆盖 |
-
----
-
-## 📝 配置项清单 / Site Configs Reference
-
-### 首页配置 (page: home)
-| config_key | 说明 |
-| :--- | :--- |
-| `home_hero_title` | Hero 大标题 |
-| `home_hero_subtitle` | Hero 副标题 |
-| `home_hero_status` | Hero 状态标签 |
-| `home_hero_fields` | Hero 领域标签 |
-| `home_marquee_text` | 滚动公告栏文字 |
-| `home_stat_a_value`/`label`/`desc` | 数据墙第 1 项 |
-| `home_stat_b_value`/`label`/`desc` | 数据墙第 2 项 |
-| `home_stat_c_value`/`label`/`desc` | 数据墙第 3 项 |
-| `home_stat_d_value`/`label`/`desc` | 数据墙第 4 项 |
-
-### 全局联系配置 (page: contact)
-| config_key | 说明 |
-| :--- | :--- |
-| `contact_studio_email` | 合作邮箱 |
-| `contact_studio_wechat` | 微信 ID |
-| `contact_studio_wechat_qrcode` | 微信二维码 R2 URL |
 
 ---
 
@@ -169,8 +199,8 @@ MIT License — 详见项目根目录。
 
 ---
 
-<div align="center">
-<p style="color: #6b7280; font-size: 14px;">
+&lt;div align="center"&gt;
+&lt;p style="color: #6b7280; font-size: 14px;"&gt;
 Built with 💜 by XiaoXi Studio • © 2024
-</p>
-</div>
+&lt;/p&gt;
+&lt;/div&gt;
