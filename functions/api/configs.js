@@ -167,7 +167,7 @@ export async function onRequestPost(context) {
       String(value)
     ).run();
 
-    return jsonResponse({ success: true, key, message: `Config key "${key}" updated successfully" });
+    return jsonResponse({ success: true, key, message: 'Config key ' + key + ' updated successfully' });
   } catch (err) {
     console.error('[configs POST] Error:', err);
     return errorResponse('Database write error: ' + err.message);
