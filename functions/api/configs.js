@@ -1,5 +1,5 @@
 
-// functions/api/configs.js — Cloudflare Pages Functions
+// functions/api/configs.js - Cloudflare Pages Functions
 // 真正承接前端请求，操作控制台一键绑定的 D1
 // GET /api/configs?page=home
 // POST /api/configs (带 Basic Auth)
@@ -35,7 +35,7 @@ function checkBasicAuth(request, env) {
     if (colonIdx === -1) return false;
     const user = decoded.slice(0, colonIdx);
     const pass = decoded.slice(colonIdx + 1);
-    return user === 'xiaoxi' &amp;&amp; pass === expectedPassword;
+    return user === 'xiaoxi' && pass === expectedPassword;
   } catch {
     return false;
   }
@@ -50,14 +50,14 @@ export async function onRequestOptions(context) {
 }
 
 // ============================================================
-// GET /api/configs?page=home —— 从一键绑定的 D1 数据库读取平铺配置
+// GET /api/configs?page=home - 从一键绑定的 D1 数据库读取平铺配置
 // ============================================================
 
 export async function onRequestGet(context) {
   const { searchParams } = new URL(context.request.url);
   const page = searchParams.get('page') || 'home';
   const keysParam = searchParams.get('keys');
-  const db = context.env.DB; // 这行代码直接接通控制台一键绑定的 DB 资源！
+  const db = context.env.DB;
 
   if (!db) {
     return errorResponse('D1 Database binding "DB" is missing', 500);
@@ -67,11 +67,11 @@ export async function onRequestGet(context) {
     let results;
 
     if (keysParam) {
-      const keyList = keysParam.split(',').map(k =&gt; k.trim()).filter(Boolean);
+      const keyList = keysParam.split(',').map(k => k.trim()).filter(Boolean);
       if (keyList.length === 0) {
         return jsonResponse({});
       }
-      const placeholders = keyList.map(() =&gt; '?').join(', ');
+      const placeholders = keyList.map(() => '?').join(', ');
       const stmt = db.prepare(`SELECT config_key, config_value FROM site_configs WHERE config_key IN (${placeholders})`);
       const { results: queryResults } = await stmt.bind(...keyList).all();
       results = queryResults;
@@ -104,7 +104,7 @@ export async function onRequestGet(context) {
 }
 
 // ============================================================
-// POST /api/configs —— 响应后台 CMS，带 HTTP Basic Auth 密码防御并写入 D1
+// POST /api/configs - 响应后台 CMS，带 HTTP Basic Auth 密码防御并写入 D1
 // ============================================================
 
 export async function onRequestPost(context) {
@@ -112,7 +112,6 @@ export async function onRequestPost(context) {
   const authHeader = context.request.headers.get('Authorization');
   const expectedPassword = context.env.ADMIN_PASSWORD || 'admin123';
 
-  // 1. 拦截未授权请求，强制弹出控制台登录框
   if (!checkBasicAuth(context.request, context.env)) {
     return new Response('Unauthorized', {
       status: 401,
@@ -131,12 +130,12 @@ export async function onRequestPost(context) {
     const body = await context.request.json();
 
     if (Array.isArray(body.configs)) {
-      const statements = body.configs.map(item =&gt; {
+      const statements = body.configs.map(item => {
         if (!item.key || item.value === undefined) return null;
         return db.prepare(
           `INSERT OR REPLACE INTO site_configs (page_name, section_id, config_key, config_value, updated_at)
-          VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-        `).bind(
+          VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)`
+        ).bind(
           item.page_name || 'global',
           item.section_id || 'general',
           item.key,
@@ -160,15 +159,15 @@ export async function onRequestPost(context) {
 
     await db.prepare(
       `INSERT OR REPLACE INTO site_configs (page_name, section_id, config_key, config_value, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-    `).bind(
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)`
+    ).bind(
       page_name || 'global',
       section_id || 'general',
       key,
       String(value)
     ).run();
 
-    return jsonResponse({ success: true, key, message: `Config key "${key}" updated successfully` });
+    return jsonResponse({ success: true, key, message: `Config key "${key}" updated successfully" });
   } catch (err) {
     console.error('[configs POST] Error:', err);
     return errorResponse('Database write error: ' + err.message);

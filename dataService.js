@@ -1,5 +1,5 @@
 
-// dataService.js — XiaoXi Studio 核心数据分流层
+// dataService.js - XiaoXi Studio 核心数据分流层
 // 本地 localStorage 闭环 / 线上 fetch() 真实请求
 // 自动通过 location.hostname 智能切流
 
@@ -24,12 +24,12 @@ const MOCK_CATEGORIES = [
 ];
 
 const MOCK_PROJECTS = [
-  { id: 1, sequenceId: 1, title: 'Cybernetic Echoes', description: 'AI-driven concept visualization for an upcoming tech apparel brand.', categorySlug: 'creative', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&amp;fit=crop&amp;w=800&amp;q=80', detailUrl: '#' },
+  { id: 1, sequenceId: 1, title: 'Cybernetic Echoes', description: 'AI-driven concept visualization for an upcoming tech apparel brand.', categorySlug: 'creative', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', detailUrl: '#' },
   { id: 2, sequenceId: 2, title: 'Flow State Motion', description: 'Abstract motion design campaign exploring fluidity and rhythm in digital spaces.', categorySlug: 'mg', mediaType: 'video', mediaUrl: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-32124-large.mp4', detailUrl: '#' },
-  { id: 3, sequenceId: 3, title: 'Dreamscape TVC', description: 'Full production commercial spot blending live-action footage with stylized 3D environments.', categorySlug: 'tvc', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&amp;fit=crop&amp;w=800&amp;q=80', detailUrl: '#' },
+  { id: 3, sequenceId: 3, title: 'Dreamscape TVC', description: 'Full production commercial spot blending live-action footage with stylized 3D environments.', categorySlug: 'tvc', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', detailUrl: '#' },
   { id: 4, sequenceId: 4, title: 'Viral Kinetics', description: 'High-retention social media content series optimized for vertical formats.', categorySlug: 'tiktok', mediaType: 'video', mediaUrl: 'https://assets.mixkit.co/videos/preview/mixkit-vertical-neon-light-patterns-42340-large.mp4', detailUrl: '#' },
   { id: 5, sequenceId: 5, title: 'Chrono-Shift Showcase', description: 'A conceptual commercial depicting time manipulation.', categorySlug: 'creative', mediaType: 'video', mediaUrl: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-spheres-and-lines-32545-large.mp4', detailUrl: '#' },
-  { id: 6, sequenceId: 6, title: 'Neo-Retro Aesthetic', description: 'Styleframes and kinetic animation loops inspired by 80s synthwave.', categorySlug: 'mg', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&amp;fit=crop&amp;w=800&amp;q=80', detailUrl: '#' }
+  { id: 6, sequenceId: 6, title: 'Neo-Retro Aesthetic', description: 'Styleframes and kinetic animation loops inspired by 80s synthwave.', categorySlug: 'mg', mediaType: 'image', mediaUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', detailUrl: '#' }
 ];
 
 const MOCK_SITE_CONFIGS = {
@@ -61,7 +61,7 @@ const MOCK_SITE_CONFIGS = {
 // 智能环境判定
 // ============================================================
 
-const isLocal = typeof window !== 'undefined' &amp;&amp; (
+const isLocal = typeof window !== 'undefined' && (
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1' ||
   window.location.hostname === '' ||
@@ -72,7 +72,7 @@ const isLocal = typeof window !== 'undefined' &amp;&amp; (
 // LocalStorage 数据持久化助手
 // ============================================================
 
-const getLocalData = (key, fallback) =&gt; {
+const getLocalData = (key, fallback) => {
   try {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : fallback;
@@ -81,7 +81,7 @@ const getLocalData = (key, fallback) =&gt; {
   }
 };
 
-const saveLocalData = (key, data) =&gt; {
+const saveLocalData = (key, data) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch (e) {
@@ -104,8 +104,7 @@ export const dataService = {
 
   async getSiteConfigs(page) {
     if (isLocal) {
-      const localConfigs = getLocalData(`xiaoxi_site_config`, MOCK_SITE_CONFIGS);
-      // 过滤出对应页面的配置
+      const localConfigs = getLocalData('xiaoxi_site_config', MOCK_SITE_CONFIGS);
       const pagePrefix = page + '_';
       const result = {};
       for (const [key, value] of Object.entries(localConfigs)) {
@@ -121,8 +120,8 @@ export const dataService = {
       if (!res.ok) throw new Error('D1 Configs Fetch Failed');
       return await res.json();
     } catch (err) {
-      console.warn('读取云端配置失败，回退本地：', err);
-      const localConfigs = getLocalData(`xiaoxi_site_config`, MOCK_SITE_CONFIGS);
+      console.warn('读取云端配置失败，回退本地:', err);
+      const localConfigs = getLocalData('xiaoxi_site_config', MOCK_SITE_CONFIGS);
       const pagePrefix = page + '_';
       const result = {};
       for (const [key, value] of Object.entries(localConfigs)) {
@@ -193,9 +192,9 @@ export const dataService = {
       const res = await fetch('/api/categories');
       if (!res.ok) throw new Error('Categories Fetch Failed');
       const data = await res.json();
-      return Array.isArray(data) &amp;&amp; data.length &gt; 0 ? data : MOCK_CATEGORIES;
+      return Array.isArray(data) && data.length > 0 ? data : MOCK_CATEGORIES;
     } catch (err) {
-      console.warn('读取云端分类失败，回退本地：', err);
+      console.warn('读取云端分类失败，回退本地:', err);
       return getLocalData('xiaoxi_categories', MOCK_CATEGORIES);
     }
   },
@@ -203,7 +202,7 @@ export const dataService = {
   async addCategory(categoryData) {
     if (isLocal) {
       const categories = getLocalData('xiaoxi_categories', MOCK_CATEGORIES);
-      const newId = categories.length &gt; 0 ? Math.max(...categories.map(c =&gt; c.id)) + 1 : 1;
+      const newId = categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1;
       const newCategory = {
         id: newId,
         slug: categoryData.slug,
@@ -232,7 +231,7 @@ export const dataService = {
   async deleteCategory(id) {
     if (isLocal) {
       const categories = getLocalData('xiaoxi_categories', MOCK_CATEGORIES);
-      const filtered = categories.filter(c =&gt; c.id !== id);
+      const filtered = categories.filter(c => c.id !== id);
       saveLocalData('xiaoxi_categories', filtered);
       return { success: true };
     }
@@ -256,7 +255,7 @@ export const dataService = {
   async getProjects(categorySlug = 'all') {
     if (isLocal) {
       const localProjs = getLocalData('xiaoxi_projects', MOCK_PROJECTS);
-      return categorySlug === 'all' ? localProjs : localProjs.filter(p =&gt; p.categorySlug === categorySlug);
+      return categorySlug === 'all' ? localProjs : localProjs.filter(p => p.categorySlug === categorySlug);
     }
 
     try {
@@ -265,8 +264,7 @@ export const dataService = {
       if (!res.ok) throw new Error('Projects Fetch Failed');
       const dbData = await res.json();
 
-      // 核心：将云端 D1 的蛇形命名无缝转为前端渲染期待的驼峰命名
-      return dbData.map(p =&gt; ({
+      return dbData.map(p => ({
         id: p.id,
         sequenceId: p.sequence_id,
         title: p.title,
@@ -277,7 +275,7 @@ export const dataService = {
         detailUrl: p.detail_url || '#'
       }));
     } catch (err) {
-      console.warn('读取云端作品失败，回退本地：', err);
+      console.warn('读取云端作品失败，回退本地:', err);
       return getLocalData('xiaoxi_projects', MOCK_PROJECTS);
     }
   },
@@ -285,7 +283,7 @@ export const dataService = {
   async addProject(projectData) {
     if (isLocal) {
       const projects = getLocalData('xiaoxi_projects', MOCK_PROJECTS);
-      const newId = projects.length &gt; 0 ? Math.max(...projects.map(p =&gt; p.id)) + 1 : 1;
+      const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
       const newProject = {
         id: newId,
         sequenceId: parseInt(projectData.sequenceId || newId),
@@ -318,7 +316,7 @@ export const dataService = {
   async deleteProject(id) {
     if (isLocal) {
       const projects = getLocalData('xiaoxi_projects', MOCK_PROJECTS);
-      const filtered = projects.filter(p =&gt; p.id !== id);
+      const filtered = projects.filter(p => p.id !== id);
       saveLocalData('xiaoxi_projects', filtered);
       return { success: true };
     }
@@ -341,26 +339,25 @@ export const dataService = {
 
   async uploadFile(file, category, onProgress) {
     if (isLocal) {
-      // 本地模拟上传进度
-      for (let i = 0; i &lt;= 100; i += 10) {
+      for (let i = 0; i <= 100; i += 10) {
         if (onProgress) onProgress({ loaded: i, total: 100 });
-        await new Promise(r =&gt; setTimeout(r, 50));
+        await new Promise(r => setTimeout(r, 50));
       }
       return { success: true, mediaUrl: URL.createObjectURL(file), filename: file.name };
     }
 
-    return new Promise((resolve, reject) =&gt; {
+    return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `/api/upload?category=${encodeURIComponent(category)}`);
 
-      if (onProgress &amp;&amp; xhr.upload) {
-        xhr.upload.addEventListener('progress', e =&gt; {
+      if (onProgress && xhr.upload) {
+        xhr.upload.addEventListener('progress', e => {
           if (e.lengthComputable) onProgress({ loaded: e.loaded, total: e.total });
         });
       }
 
-      xhr.onload = () =&gt; {
-        if (xhr.status &gt;= 200 &amp;&amp; xhr.status &lt; 300) {
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
           try {
             resolve(JSON.parse(xhr.responseText));
           } catch {
@@ -371,7 +368,7 @@ export const dataService = {
         }
       };
 
-      xhr.onerror = () =&gt; reject(new Error('网络错误'));
+      xhr.onerror = () => reject(new Error('网络错误'));
       const fd = new FormData();
       fd.append('file', file);
       xhr.send(fd);
@@ -389,7 +386,7 @@ export const dataService = {
       if (!res.ok) throw new Error('Config Fetch Failed');
       return await res.json();
     } catch (err) {
-      console.warn('读取遗留配置失败，回退本地：', err);
+      console.warn('读取遗留配置失败，回退本地:', err);
       return MOCK_CONFIG;
     }
   }
