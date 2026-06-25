@@ -2,8 +2,3 @@
 name = "xiaoxi-studio"
 compatibility_date = "2026-06-25"
 pages_build_output_dir = "public"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "xiaoxi-db"
-database_id = "d1-local-db-placeholder"
